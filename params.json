@@ -1,5 +1,5 @@
 {
-  "name": "Sa",
+  "name": "SA",
   "tagline": "Sensitivity Analysis for Complex Computational Models",
   "body": "<!-- README.md is generated from README.Rmd. Please edit that file -->\r\n[![Build Status](https://magnum.travis-ci.com/JohnNay/eat.png?branch=master)](https://magnum.travis-ci.com/JohnNay/eat)\r\n\r\nThis R package facilitates sensitivity analyses of complex models.\r\n\r\nIf you use this package, cite: \"Nay, John J. (2016). sa: Sensitivity Analysis for Complex Computational Models.\"\r\n\r\nInstall and load the latest release of the package from GitHub:\r\n\r\n``` r\r\n# install.packages(\"devtools\")\r\ndevtools::install_github(\"JohnNay/sa\")\r\nlibrary(sa)\r\n```\r\n",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
