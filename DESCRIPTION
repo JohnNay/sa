@@ -1,0 +1,27 @@
+Package: sa
+Title: Sensitivity Analysis for Complex Computational Models
+Version: 0.0.1
+Date: 2016-04-05
+Authors@R: c( person("Nay", "John", email = "john.j.nay@gmail.com", role =
+    c("cre", "aut")))
+URL: https://github.com/JohnNay/eat
+BugReports: https://github.com/JohnNay/eat/issues
+Description: Sensitivity Analysis for Complex Computational Models.
+Depends:
+    R (>= 3.2.3),
+    methods,
+    stats
+License: MIT + file LICENSE
+LazyData: true
+Suggests:
+    testthat,
+    knitr,
+    WhatIf
+Imports:
+    lhs,
+    doParallel,
+    foreach,
+    ggplot2,
+    sensitivity,
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
