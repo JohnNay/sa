@@ -1,6 +1,6 @@
 {
   "name": "SA",
   "tagline": "Sensitivity Analysis for Complex Computational Models",
-  "body": "<!-- README.md is generated from README.Rmd. Please edit that file -->\r\n[![Build Status](https://travis-ci.org/JohnNay/sa.svg?branch=master)](https://travis-ci.org/JohnNay/sa.svg?branch=master)\r\n\r\nThis R package facilitates data-driven agent-based simulation modeling. eat stands for Empirical Agent Training.\r\n\r\nIf you use this package, cite: \"Nay, John J. (2016). eat: Empirical Agent Training Software for Data-Driven Modeling. R package version 0.1. <https://github.com/JohnNay/eat>\".\r\n\r\nInstall and load the latest release of the package from GitHub:\r\n\r\n``` r\r\n# install.packages(\"devtools\")\r\ndevtools::install_github(\"JohnNay/eat\")\r\nlibrary(eat)\r\n```\r\n",
+  "body": "<!-- README.md is generated from README.Rmd. Please edit that file -->\r\n[![Build Status](https://travis-ci.org/JohnNay/sa.svg?branch=master)](https://travis-ci.org/JohnNay/sa.svg?branch=master)\r\n\r\nThis R package facilitates Sensitivity Analysis for Complex Computational Models.\r\n\r\nInstall and load the latest release of the package from GitHub:\r\n\r\n``` r\r\n# install.packages(\"devtools\")\r\ndevtools::install_github(\"JohnNay/sa\")\r\nlibrary(sa)\r\n```\r\n",
   "note": "Don't delete this file! It's used internally to help with page regeneration."
 }
