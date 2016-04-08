@@ -90,23 +90,18 @@ create_set <- function(input_values = NULL,
       constrained <- with(to_add, eval(parse(text=constraints)))
       to_add <- keep_satisfied(to_add, constrained)
     }
-      if(!is.null(model_data)){
-    if(!is.null(model_data_formula)){
-      constrained <- WhatIf::whatif(formula = model_data_formula,
-                                    data = model_data[sort(colnames(model_data))], 
-                                    cfact = to_add[sort(colnames(to_add))],
-                                    choice = "hull")$in.hull
-    } else {
-      constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
-                                    cfact = to_add[sort(colnames(to_add))],
-                                    choice = "hull")$in.hull
-    }
-      to_add <- keep_satisfied(to_add, constrained)
-  }
+    
     if(!is.null(model_data)){
-      constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
-                                    cfact = to_add[sort(colnames(to_add))],
-                                    choice = "hull")$in.hull
+      if(!is.null(model_data_formula)){
+        constrained <- WhatIf::whatif(formula = model_data_formula,
+                                      data = model_data[sort(colnames(model_data))], 
+                                      cfact = to_add[sort(colnames(to_add))],
+                                      choice = "hull")$in.hull
+      } else {
+        constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
+                                      cfact = to_add[sort(colnames(to_add))],
+                                      choice = "hull")$in.hull
+      }
       to_add <- keep_satisfied(to_add, constrained)
     }
     
