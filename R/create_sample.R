@@ -15,12 +15,17 @@
 #'  the convex hull of the data used to build the model that is now being
 #'  analyzed. This uses the WhatIf package in the Suggest field of the eat
 #'  description file.
+#'@param create_input_values Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
+#' you can provide a function to this arg that creates a row worth of data itself.
 #'  
 #'@return Returns a \code{data.frame} of samples.
 #'  
 #'@export
-create_set <- function(input_values, input_names, sample_count, constraints,
-                       model_data){
+create_set <- function(input_values = NULL, 
+                       input_names = NULL,
+                       sample_count, constraints,
+                       model_data,
+                       create_input_values = NULL){
   
   if(!is.null(model_data)){
     if (!requireNamespace("WhatIf", quietly = TRUE)) {
@@ -33,7 +38,15 @@ create_set <- function(input_values, input_names, sample_count, constraints,
     sample_count <- sample_count*2
   }
   
-  input.sets <- create_sample(input_values, input_names, sample_count)
+  if(!is.null(input_values) & !is.null(input_names)){
+    input.sets <- create_sample(input_values, input_names, sample_count)
+  } else{
+    if(!is.null(create_input_values)){
+      input.sets <- do.call(rbind, lapply(seq(sample_count), function(i) create_input_values()))
+    } else{
+      stop("You either need create_input_values or BOTH input_valuesa and input_names.")
+    }
+  }
   
   # Discard input factor sets that violate constraints:
   if(constraints != "none") {
@@ -52,7 +65,15 @@ create_set <- function(input_values, input_names, sample_count, constraints,
   
   while(needed > 0) { 
     # Create input factor sets by latin hypercube sampling:
-    to_add <- create_sample(input_values, input_names, needed+(needed/2))
+    if(!is.null(input_values) & !is.null(input_names)){
+      to_add <- create_sample(input_values, input_names, as.integer(needed+(needed/2)))
+    } else{
+      if(!is.null(create_input_values)){
+        to_add <- do.call(rbind, lapply(seq(as.integer(needed+(needed/2))), function(i) create_input_values()))
+      } else{
+        stop("You either need create_input_values or BOTH input_values and input_names.")
+      }
+    }
     
     # Discard input sets that violate constraints:
     if(constraints != "none") {
