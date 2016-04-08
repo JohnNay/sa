@@ -33,16 +33,18 @@ create_set <- function(input_values = NULL,
            call. = FALSE)
     }
     # A lot will probably not work so generate more each time than you would otherwise.
-    sample_count <- sample_count*2
+    sample_count2 <- sample_count*2
+  } else {
+    sample_count2 <- sample_count
   }
   
   if(!is.null(input_values) & !is.null(input_names)){
-    input.sets <- create_sample(input_values, input_names, sample_count)
+    input.sets <- create_sample(input_values, input_names, sample_count2)
   } else{
     if(!is.null(create_input_values)){
-      input.sets <- create_input_values(sample_count)
+      input.sets <- create_input_values(sample_count2)
     } else{
-      stop("You either need create_input_values or BOTH input_valuesa and input_names.")
+      stop("You either need create_input_values or BOTH input_values and input_names.")
     }
   }
   
@@ -88,6 +90,19 @@ create_set <- function(input_values = NULL,
       constrained <- with(to_add, eval(parse(text=constraints)))
       to_add <- keep_satisfied(to_add, constrained)
     }
+      if(!is.null(model_data)){
+    if(!is.null(model_data_formula)){
+      constrained <- WhatIf::whatif(formula = model_data_formula,
+                                    data = model_data[sort(colnames(model_data))], 
+                                    cfact = to_add[sort(colnames(to_add))],
+                                    choice = "hull")$in.hull
+    } else {
+      constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
+                                    cfact = to_add[sort(colnames(to_add))],
+                                    choice = "hull")$in.hull
+    }
+      to_add <- keep_satisfied(to_add, constrained)
+  }
     if(!is.null(model_data)){
       constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
                                     cfact = to_add[sort(colnames(to_add))],
