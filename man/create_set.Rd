@@ -33,7 +33,7 @@ analyzed. This uses the WhatIf package in the Suggest field of the eat
 description file.}
 
 \item{create_input_values}{Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
-you can provide a function to this arg that creates a row worth of data itself.}
+you can provide a function to this arg that takes an arg for how many samples to create and returns a data.frame with that many rows of samples.}
 
 \item{sampled}{Output of create sample_sample}
 

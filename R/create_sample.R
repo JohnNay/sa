@@ -16,7 +16,7 @@
 #'  analyzed. This uses the WhatIf package in the Suggest field of the eat
 #'  description file.
 #'@param create_input_values Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
-#' you can provide a function to this arg that creates a row worth of data itself.
+#' you can provide a function to this arg that takes an arg for how many samples to create and returns a data.frame with that many rows of samples.
 #'  
 #'@return Returns a \code{data.frame} of samples.
 #'  
@@ -42,7 +42,7 @@ create_set <- function(input_values = NULL,
     input.sets <- create_sample(input_values, input_names, sample_count)
   } else{
     if(!is.null(create_input_values)){
-      input.sets <- do.call(rbind, lapply(seq(sample_count), function(i) create_input_values()))
+      input.sets <- create_input_values(sample_count)
     } else{
       stop("You either need create_input_values or BOTH input_valuesa and input_names.")
     }
@@ -69,7 +69,7 @@ create_set <- function(input_values = NULL,
       to_add <- create_sample(input_values, input_names, as.integer(needed+(needed/2)))
     } else{
       if(!is.null(create_input_values)){
-        to_add <- do.call(rbind, lapply(seq(as.integer(needed+(needed/2))), function(i) create_input_values()))
+        to_add <- create_input_values(as.integer(needed+(needed/2)))
       } else{
         stop("You either need create_input_values or BOTH input_values and input_names.")
       }
