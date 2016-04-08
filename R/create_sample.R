@@ -24,7 +24,7 @@
 create_set <- function(input_values = NULL, 
                        input_names = NULL,
                        sample_count, constraints,
-                       model_data,
+                       model_data, model_data_formula = NULL,
                        create_input_values = NULL){
   
   if(!is.null(model_data)){
@@ -52,12 +52,19 @@ create_set <- function(input_values = NULL,
     input.sets <- keep_satisfied(input.sets, constrained)
   }
   if(!is.null(model_data)){
-    if(!identical(sort(colnames(input.sets)), sort(colnames(model_data))))
-      stop("Names of the input_values are not identical to the names of the columns in the model_data.")
-    
-    constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
-                                  cfact = input.sets[sort(colnames(input.sets))],
-                                  choice = "hull")$in.hull
+    if(!is.null(model_data_formula)){
+      constrained <- WhatIf::whatif(formula = model_data_formula,
+                                    data = model_data[sort(colnames(model_data))], 
+                                    cfact = input.sets[sort(colnames(input.sets))],
+                                    choice = "hull")$in.hull
+    } else {
+      if(!identical(sort(colnames(input.sets)), sort(colnames(model_data))))
+        stop("Names of the input_values are not identical to the names of the columns in the model_data.")
+      
+      constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
+                                    cfact = input.sets[sort(colnames(input.sets))],
+                                    choice = "hull")$in.hull
+    }
     input.sets <- keep_satisfied(input.sets, constrained)
   }
   
