@@ -29,6 +29,8 @@ create_set <- function(input_values, input_names, sample_count, constraints,
     }
     if(!identical(sort(input_names), sort(colnames(model_data))))
       stop("Names of the input_values are not identical to the names of the columns in the model_data.")
+    # A lot will probably not work so generate more each time than you would otherwise.
+    sample_count <- sample_count*2
   }
   
   input.sets <- create_sample(input_values, input_names, sample_count)
@@ -46,11 +48,11 @@ create_set <- function(input_values, input_names, sample_count, constraints,
   }
   
   needed <- sample_count - nrow(input.sets)
-  message("We need", needed, "more observations in the sample.")
+  message("We need ", needed, " more observations in the sample.")
   
   while(needed > 0) { 
     # Create input factor sets by latin hypercube sampling:
-    to_add <- create_sample(input_values, input_names, needed)
+    to_add <- create_sample(input_values, input_names, needed+(needed/2))
     
     # Discard input sets that violate constraints:
     if(constraints != "none") {
@@ -66,7 +68,7 @@ create_set <- function(input_values, input_names, sample_count, constraints,
     
     input.sets <- rbind(input.sets, to_add)
     needed <- sample_count - nrow(input.sets)
-    message("We need", needed, "more observations in the sample.")
+    message("We need ", needed, " more observations in the sample.")
   }
   
   input.sets
@@ -119,7 +121,7 @@ create_sample <- function(input_values, input_names, sample_count) {
 #'@export
 
 keep_satisfied <- function(sampled, constrained){
-  message("Droppping", sum(!constrained), "observations.")
+  message("Droppping ", sum(!constrained), " observations.")
   stopifnot(identical(nrow(sampled), length(constrained)))
   result <- data.frame(sampled[constrained, , drop=FALSE])
   stopifnot(nrow(result) <= nrow(sampled))
