@@ -32,8 +32,6 @@ create_set <- function(input_values = NULL,
       stop("The WhatIf package is needed to ensure that all parameters tested are in the convex hull of the data you have provided. Please install it.",
            call. = FALSE)
     }
-    if(!identical(sort(input_names), sort(colnames(model_data))))
-      stop("Names of the input_values are not identical to the names of the columns in the model_data.")
     # A lot will probably not work so generate more each time than you would otherwise.
     sample_count <- sample_count*2
   }
@@ -54,6 +52,9 @@ create_set <- function(input_values = NULL,
     input.sets <- keep_satisfied(input.sets, constrained)
   }
   if(!is.null(model_data)){
+    if(!identical(sort(colnames(input.sets)), sort(colnames(model_data))))
+      stop("Names of the input_values are not identical to the names of the columns in the model_data.")
+    
     constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
                                   cfact = input.sets[sort(colnames(input.sets))],
                                   choice = "hull")$in.hull
