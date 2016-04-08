@@ -15,6 +15,7 @@
 #'  the convex hull of the data used to build the model that is now being
 #'  analyzed. This uses the WhatIf package in the Suggest field of the eat
 #'  description file.
+#'@param model_data_formula optional formula for WhatIf package.
 #'@param create_input_values Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
 #' you can provide a function to this arg that takes an arg for how many samples to create and returns a data.frame with that many rows of samples.
 #'  
@@ -33,7 +34,7 @@ create_set <- function(input_values = NULL,
            call. = FALSE)
     }
     # A lot will probably not work so generate more each time than you would otherwise.
-    sample_count2 <- sample_count*2
+    sample_count2 <- sample_count*1000
   } else {
     sample_count2 <- sample_count
   }

@@ -7,7 +7,8 @@
 \title{Create set of samples by sampling with LHS and then checking constraints.}
 \usage{
 create_set(input_values = NULL, input_names = NULL, sample_count,
-  constraints, model_data, create_input_values = NULL)
+  constraints, model_data, model_data_formula = NULL,
+  create_input_values = NULL)
 
 create_sample(input_values, input_names, sample_count)
 
@@ -31,6 +32,8 @@ model. This is used if one wants to ensure that all parameters tested are in
 the convex hull of the data used to build the model that is now being
 analyzed. This uses the WhatIf package in the Suggest field of the eat
 description file.}
+
+\item{model_data_formula}{optional formula for WhatIf package.}
 
 \item{create_input_values}{Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
 you can provide a function to this arg that takes an arg for how many samples to create and returns a data.frame with that many rows of samples.}
