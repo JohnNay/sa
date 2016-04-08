@@ -46,6 +46,7 @@ create_set <- function(input_values, input_names, sample_count, constraints,
   }
   
   needed <- sample_count - nrow(input.sets)
+  message("We need", needed, "more observations in the sample.")
   
   while(needed > 0) { 
     # Create input factor sets by latin hypercube sampling:
@@ -65,6 +66,7 @@ create_set <- function(input_values, input_names, sample_count, constraints,
     
     input.sets <- rbind(input.sets, to_add)
     needed <- sample_count - nrow(input.sets)
+    message("We need", needed, "more observations in the sample.")
   }
   
   input.sets
@@ -117,6 +119,7 @@ create_sample <- function(input_values, input_names, sample_count) {
 #'@export
 
 keep_satisfied <- function(sampled, constrained){
+  message("Droppping", sum(!constrained), "observations.")
   stopifnot(identical(nrow(sampled), length(constrained)))
   result <- data.frame(sampled[constrained, , drop=FALSE])
   stopifnot(nrow(result) <= nrow(sampled))
