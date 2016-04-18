@@ -35,8 +35,10 @@ create_set <- function(input_values = NULL,
       stop("The WhatIf package is needed to ensure that all parameters tested are in the convex hull of the data you have provided. Please install it.",
            call. = FALSE)
     }
-    # A lot will probably not work so generate more each time than you would otherwise.
-    sample_count2 <- sample_count*1000
+    if(!  add_model_data_col){
+      # A lot will probably not work so generate more each time than you would otherwise.
+      sample_count2 <- sample_count*1000
+    }
   } else {
     sample_count2 <- sample_count
   }
@@ -58,27 +60,28 @@ create_set <- function(input_values = NULL,
   }
   if(!is.null(model_data)){
     if(!is.null(model_data_formula)){
-      constrained <- WhatIf::whatif(formula = model_data_formula,
-                                    data = model_data[sort(colnames(model_data))], 
-                                    cfact = input.sets[sort(colnames(input.sets))],
-                                    choice = "hull")$in.hull
       if(add_model_data_col){
         dists <- WhatIf::whatif(formula = model_data_formula,
                                 data = model_data[sort(colnames(model_data))], 
                                 cfact = input.sets[sort(colnames(input.sets))],
                                 return.distance = TRUE, choice = "distance")$dist
+      } else {
+        constrained <- WhatIf::whatif(formula = model_data_formula,
+                                      data = model_data[sort(colnames(model_data))], 
+                                      cfact = input.sets[sort(colnames(input.sets))],
+                                      choice = "hull")$in.hull
       }
     } else {
       if(!identical(sort(colnames(input.sets)), sort(colnames(model_data))))
         stop("Names of the input_values are not identical to the names of the columns in the model_data.")
-      
-      constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
-                                    cfact = input.sets[sort(colnames(input.sets))],
-                                    choice = "hull")$in.hull
       if(add_model_data_col){
         dists <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
                                 cfact = input.sets[sort(colnames(input.sets))],
                                 return.distance = TRUE, choice = "distance")$dist
+      } else {
+        constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
+                                      cfact = input.sets[sort(colnames(input.sets))],
+                                      choice = "hull")$in.hull
       }
     }
     input.sets <- keep_satisfied(input.sets, constrained)
