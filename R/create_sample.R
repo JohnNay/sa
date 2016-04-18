@@ -84,12 +84,13 @@ create_set <- function(input_values = NULL,
                                       choice = "hull")$in.hull
       }
     }
-    input.sets <- keep_satisfied(input.sets, constrained)
     
     if(add_model_data_col){
       # The [i, j]th entry of the matrix contains the distance between the ith counterfactual and the jth data point.
       # so rows are the counterfactuals, take the mean of each row.
       input.sets$dist_vec <- rowMeans(dists)
+    } else {
+      input.sets <- keep_satisfied(input.sets, constrained) 
     }
   }
   
