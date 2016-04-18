@@ -38,6 +38,8 @@ create_set <- function(input_values = NULL,
     if(!  add_model_data_col){
       # A lot will probably not work so generate more each time than you would otherwise.
       sample_count2 <- sample_count*1000
+    } else {
+      sample_count2 <- sample_count
     }
   } else {
     sample_count2 <- sample_count
