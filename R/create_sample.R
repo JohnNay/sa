@@ -16,6 +16,7 @@
 #'  analyzed. This uses the WhatIf package in the Suggest field of the eat
 #'  description file.
 #'@param model_data_formula optional formula for WhatIf package.
+#'@param add_model_data_col optional Logical for whether to add col
 #'@param create_input_values Instead of the input_values and input_names args which lead the function to use LHS and create the samples that way
 #' you can provide a function to this arg that takes an arg for how many samples to create and returns a data.frame with that many rows of samples.
 #'  
@@ -26,6 +27,7 @@ create_set <- function(input_values = NULL,
                        input_names = NULL,
                        sample_count, constraints,
                        model_data, model_data_formula = NULL,
+                       add_model_data_col = FALSE,
                        create_input_values = NULL){
   
   if(!is.null(model_data)){
@@ -60,6 +62,12 @@ create_set <- function(input_values = NULL,
                                     data = model_data[sort(colnames(model_data))], 
                                     cfact = input.sets[sort(colnames(input.sets))],
                                     choice = "hull")$in.hull
+      if(add_model_data_col){
+        dists <- WhatIf::whatif(formula = model_data_formula,
+                                data = model_data[sort(colnames(model_data))], 
+                                cfact = input.sets[sort(colnames(input.sets))],
+                                return.distance = TRUE, choice = "distance")$dist
+      }
     } else {
       if(!identical(sort(colnames(input.sets)), sort(colnames(model_data))))
         stop("Names of the input_values are not identical to the names of the columns in the model_data.")
@@ -67,8 +75,19 @@ create_set <- function(input_values = NULL,
       constrained <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
                                     cfact = input.sets[sort(colnames(input.sets))],
                                     choice = "hull")$in.hull
+      if(add_model_data_col){
+        dists <- WhatIf::whatif(data = model_data[sort(colnames(model_data))], 
+                                cfact = input.sets[sort(colnames(input.sets))],
+                                return.distance = TRUE, choice = "distance")$dist
+      }
     }
     input.sets <- keep_satisfied(input.sets, constrained)
+    
+    if(add_model_data_col){
+      # The [i, j]th entry of the matrix contains the distance between the ith counterfactual and the jth data point.
+      # so rows are the counterfactuals, take the mean of each row.
+      input.sets$dist_vec <- rowMeans(dists)
+    }
   }
   
   needed <- sample_count - nrow(input.sets)
